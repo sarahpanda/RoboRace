@@ -1,4 +1,4 @@
-function obstacles = roboRace()
+function grown_obstacles = roboRace()
 
 % read coordinates
 
@@ -35,6 +35,8 @@ end
 
 r = radius;
 
+grown_obstacles = [];
+
 % Grow the obstacle
 for i = 1:totalObs
   if i == 1
@@ -51,6 +53,10 @@ for i = 1:totalObs
   
   hull = convhull(points(:,1), points(:,2));
   
+  grown = repmat(i, 1, size(hull,1));
+  
+  grown_obstacles = [grown_obstacles; grown', points(hull,1), points(hull,2)];
+  
   for k = 1:size(hull,1)-1
       p1 = points(hull(k),:);
       p2 = points(hull(k+1),:);
@@ -64,6 +70,4 @@ for i = 1:totalObs
   hold on;
   
 end
-
-
 end
