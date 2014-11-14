@@ -1,5 +1,15 @@
 function grown_obstacles = roboRace()
 
+startPt = [0.58 -3.107];
+endPt = [-0.03 10.657];
+
+
+f = figure();
+
+plot(startPt(1), startPt(2),'gx');
+hold on;
+plot(endPt(1), endPt(2), 'rx');
+hold on;
 % read coordinates
 
 [x,y,zero] = textread('map.txt');
@@ -9,8 +19,6 @@ pointer = 1;
 obstacles = [];
 
 radius = 0.2;
-
-f = figure();
 
 for i = 1:totalObs
     vertex_beg = pointer+1;
@@ -35,8 +43,6 @@ end
 
 r = radius;
 
-grown_obstacles = [];
-
 % Grow the obstacle
 for i = 1:totalObs
   if i == 1
@@ -52,22 +58,24 @@ for i = 1:totalObs
   end
   
   hull = convhull(points(:,1), points(:,2));
-  
-  grown = repmat(i, 1, size(hull,1));
-  
-  grown_obstacles = [grown_obstacles; grown', points(hull,1), points(hull,2)];
+  hull = hull(1:size(hull)-1);
+%   grown = repmat(i, 1, size(hull,1));
+%   
+%   grown_obstacles = [grown_obstacles; grown', points(hull,1), points(hull,2)];
+  grown_obstacles{i} = [points(hull,1), points(hull,2)];
   
   for k = 1:size(hull,1)-1
       p1 = points(hull(k),:);
       p2 = points(hull(k+1),:);
       
-      line([p1(1) p2(1)],[p1(2) p2(2)], 'Color', [1, 0, 0]);
+      line([p1(1) p2(1)],[p1(2) p2(2)], 'Color', [1, 0, 0], 'Marker', 'o');
       hold on;
   end
   p1 = points(hull(size(hull,1)),:);
   p2 = points(hull(1),:);
-  line([p1(1) p2(1)],[p1(2) p2(2)], 'Color', [1, 0, 0]);
+  line([p1(1) p2(1)],[p1(2) p2(2)], 'Color', [1, 0, 0], 'Marker', 'o');
   hold on;
   
 end
+ cleanedPoints = createVGraph(grown_obstacles);
 end
