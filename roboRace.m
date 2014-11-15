@@ -78,4 +78,13 @@ for i = 1:totalObs
   
 end
  cleanedPoints = createVGraph(grown_obstacles);
+ no_Vertices = 0;
+ for i = 1: length(cleanedPoints)
+     no_Vertices = no_Vertices + size(cleanedPoints{i},1);
+ end
+ 
+ % Create matrix of all cleaned points and discard invalid edges within a
+ % polygon
+ 
+ edges = ones(no_Vertices, no_Vertices);
 end
