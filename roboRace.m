@@ -1,4 +1,4 @@
-function [] = roboRace()
+function [V, E] = roboRace()
 
     radius = 0.2;
     mapFile = 'map.txt';
@@ -33,12 +33,12 @@ function [] = roboRace()
         curr_obs  = curr_obs + 1;
         pointer = pointer + vertices_cnt+1;
     end
-    drawPolygons(f, obstacles, [0 0 1], 'x');
+    drawPolygons(f, obstacles, [0 0 1], 'x', 1);
     r = radius;
-
 
     % Grow the obstacle
     grown_obstacles = {};
+    grown_obstacles{1} = obstacles{1};
     
     for i = 2:length(obstacles)
         points = [];
@@ -51,11 +51,14 @@ function [] = roboRace()
         hull = hull(1:size(hull)-1);
 
         convex_hull = [points(hull,1), points(hull,2)];
-        grown_obstacles{i-1} = convex_hull;
+        grown_obstacles{i} = convex_hull;
 
     end
-    drawPolygons(f, grown_obstacles, [1 0 0], 'o');
-    cleanPolygons = createVGraph(grown_obstacles);
-    drawPolygons(f, cleanPolygons, [0 1 0], 'o');
+    drawPolygons(f, grown_obstacles, [1 0 0], 'o', 2);
+    [V, E] = createVGraph(grown_obstacles);
+    figure (f);
+    plot(V(:,1), V(:,2), 'g*');
+    axis equal;
+    hold on;
     
 end

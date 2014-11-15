@@ -1,5 +1,6 @@
-function []=  drawPolygons(f, polygons, colour, marker)
-    for p = 1:length(polygons)
+function []=  drawPolygons(f, polygons, colour, marker, start)
+    figure(f);
+    for p = start:length(polygons)
         polygon = polygons{p};
         
         for k = 1:size(polygon,1)-1
