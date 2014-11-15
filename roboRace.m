@@ -1,5 +1,5 @@
 function [V, E] = roboRace()
-
+    clear all, close all, clc;
     radius = 0.2;
     mapFile = 'map.txt';
     
@@ -55,10 +55,7 @@ function [V, E] = roboRace()
 
     end
     drawPolygons(f, grown_obstacles, [1 0 0], 'o', 2);
-    [V, E] = createVGraph(grown_obstacles);
-    figure (f);
-    plot(V(:,1), V(:,2), 'g*');
+    [V, E] = createVGraph(f, grown_obstacles, startPt, endPt);
+    figure(f);
     axis equal;
-    hold on;
-    
 end
