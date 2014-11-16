@@ -1,24 +1,25 @@
 clear;
-noOfNodes  = 50;
+
+VertexMatrix = [0 0; 6 6; 1 3; 2 2]; 
+DistanceMatrix = [inf inf 5 6; inf inf 7 inf; 5 7 inf 4; 6 inf 4 inf];
+
+noOfNodes  = size(VertexMatrix, 1); %count number of nodes
 rand('state', 0);
 figure(1);
 clf;
 hold on;
-L = 1000;
-R = 200; % maximum range;
-netXloc = rand(1,noOfNodes)*L;
-netYloc = rand(1,noOfNodes)*L;
+netXloc = VertexMatrix(:, 1);
+netYloc = VertexMatrix(:, 2); 
+
 for i = 1:noOfNodes
     plot(netXloc(i), netYloc(i), '.');
     text(netXloc(i), netYloc(i), num2str(i));
     for j = 1:noOfNodes
-        distance = sqrt((netXloc(i) - netXloc(j))^2 + (netYloc(i) - netYloc(j))^2);
-        if distance <= R
-            matrix(i, j) = 1;   % there is a link;
-            line([netXloc(i) netXloc(j)], [netYloc(i) netYloc(j)], 'LineStyle', ':');
-        else
-            matrix(i, j) = inf;
-        end;
+      if DistanceMatrix(i,j) == inf
+        continue;
+      end
+      line([netXloc(i) netXloc(j)], [netYloc(i) netYloc(j)], 'LineStyle', ':');
+      hold on;       
     end;
 end;
 
@@ -30,7 +31,7 @@ for i = 1:noOfNodes,
     farthestNextHop(i) = i;
 end;
 
-[path, totalCost, farthestPreviousHop, farthestNextHop] = dijkstra(noOfNodes, matrix, 1, 15, farthestPreviousHop, farthestNextHop);
+[path, totalCost, farthestPreviousHop, farthestNextHop] = dijkstra(noOfNodes, DistanceMatrix, noOfNodes-1, noOfNodes, farthestPreviousHop, farthestNextHop); %pass to Dijkstra (number of nodes, DistanceMatrix, Start node, Final node, ..., ...)
 path
 totalCost
 if length(path) ~= 0
