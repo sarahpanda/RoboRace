@@ -1,4 +1,4 @@
-function [V, E] = roboRace()
+function [finalPolygons V, E, polyStart, l1, l1i, l2, l2i] = roboRace()
     clear all, close all, clc;
     radius = 0.2;
     mapFile = 'map.txt';
@@ -47,7 +47,7 @@ function [V, E] = roboRace()
             vy = obstacles{i}(k,2);
             points = [points; [vx+r, vy+r]; [vx-r, vy+r]; [vx-r,vy-r]; [vx+r,vy-r]];
         end
-        hull = convhull(points(:,1), points(:,2));
+        hull = convhull(points(:,1), points(:,2), 'simplify', true);
         hull = hull(1:size(hull)-1);
 
         convex_hull = [points(hull,1), points(hull,2)];
@@ -55,7 +55,7 @@ function [V, E] = roboRace()
 
     end
     drawPolygons(f, grown_obstacles, [1 0 0], 'o', 2);
-    [V, E] = createVGraph(f, grown_obstacles, startPt, endPt);
+    [finalPolygons V, E, polyStart, l1, l1i, l2, l2i] = createVGraph(f, grown_obstacles, startPt, endPt);
     figure(f);
     axis equal;
 end
