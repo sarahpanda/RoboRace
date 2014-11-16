@@ -1,4 +1,4 @@
-function [finalPolygons V, E, polyStart, l1, l1i, l2, l2i] = roboRace()
+function [finalPolygons V, E] = roboRace()
     clear all, close all, clc;
     radius = 0.2;
     mapFile = 'map.txt';
@@ -55,7 +55,28 @@ function [finalPolygons V, E, polyStart, l1, l1i, l2, l2i] = roboRace()
 
     end
     drawPolygons(f, grown_obstacles, [1 0 0], 'o', 2);
-    [finalPolygons V, E, polyStart, l1, l1i, l2, l2i] = createVGraph(f, grown_obstacles, startPt, endPt);
+    [finalPolygons V, E] = createVGraph(f, grown_obstacles, startPt, endPt);
     figure(f);
     axis equal;
+    
+    noOfNodes = size(V, 1);
+    for i = 1:noOfNodes,
+        % initialize the farthest node to be itself;
+        farthestPreviousHop(i) = i;     % used to compute the RTS/CTS range;
+        farthestNextHop(i) = i;
+    end
+
+    [path, totalCost, farthestPreviousHop, farthestNextHop] = dijkstra(noOfNodes, E, noOfNodes-1, noOfNodes, farthestPreviousHop, farthestNextHop);
+    pathC = V(path, :);
+    lines = [];
+    for i = 1:size(pathC, 1)- 1
+        x1 = pathC(i, 1);
+        y1 = pathC(i, 2);
+        x2 = pathC(i+1, 1);
+        y2 = pathC(i+1, 2);
+        lines = [lines; x1 y1 x2 y2];
+    end
+    drawLines(f, lines, [0 1 0], 3);   
+    
+    
 end
