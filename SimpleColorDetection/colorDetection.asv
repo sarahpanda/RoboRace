@@ -1,0 +1,13 @@
+imshow(rotated);
+hold on;
+
+r = find(abs(double(rotated(:,:,1)) - 142) < 2);
+g = find(abs(double(rotated(:,:,2)) - 31) < 20);
+b = find(abs(double(rotated(:,:,3)) - 12) < 20);
+
+i = intersect(intersect(r,g),b);
+[x y] = ind2sub([size(rotated,1), size(rotated,2)], i);
+plot(y,x, 'bX');
+hold on;
+
+

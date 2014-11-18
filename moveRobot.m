@@ -2,12 +2,13 @@ function moveRobot(serPort)
     % move roomba from start to end
     load('path.mat');
     
+    angVelocity = 0.1;
+    fwdVelocity = 0.1;
+    
     current_pos = 1;
     current_orientation = pi/2;
     
     coords = [pathC(1,1) pathC(1,2) current_orientation];      %create a vecot with x, y, angle coordinates
-    
-    total_distance = 0;
     
     f1 = figure();
     axis([-10 10 -10 10]);
@@ -25,7 +26,7 @@ function moveRobot(serPort)
         
         angleToRotate = atan2(pathC(next_pos,2) - pathC(current_pos,2), pathC(next_pos,1) - pathC(current_pos,1)) -  current_orientation
         
-        SetFwdVelAngVelCreate(serPort, 0, 0.5*sign(angleToRotate));
+        SetFwdVelAngVelCreate(serPort, 0, angVelocity*sign(angleToRotate));
         pause(0.01);
         
         angle = 0;
@@ -48,7 +49,7 @@ function moveRobot(serPort)
         
         fprintf('Rotated by %d\n', angle*180/pi);
         
-        SetFwdVelAngVelCreate(serPort, 0.3, 0);
+        SetFwdVelAngVelCreate(serPort, fwdVelocity, 0);
         pause(0.01);
         
         dist = 0;
